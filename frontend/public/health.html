@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Health Check</title>
+</head>
+<body>
+    <h1>✅ Frontend is running</h1>
+    <p>Conference Lead Platform - Frontend Service</p>
+    <script>
+        // Check if API is reachable
+        const apiUrl = window.location.origin.replace(/https?:\/\//, '').replace('frontend', 'backend');
+        fetch(`https://${apiUrl}/health`)
+            .then(r => r.json())
+            .then(data => {
+                document.body.innerHTML += `<p>✅ Backend API: ${data.status}</p>`;
+            })
+            .catch(() => {
+                document.body.innerHTML += '<p>❌ Backend API: Not reachable</p>';
+            });
+    </script>
+</body>
+</html>
