@@ -13,9 +13,17 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Support comma-separated list of origins (e.g. multiple Railway URLs + localhost)
+_origins = [o.strip() for o in settings.frontend_url.split(",") if o.strip()]
+# Always include localhost for local dev
+for _local in ["http://localhost:5173", "http://localhost:3000"]:
+    if _local not in _origins:
+        _origins.append(_local)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.frontend_url, "http://localhost:5173", "http://localhost:3000"],
+    allow_origins=_origins,
+    allow_origin_regex=r"https://.*\.up\.railway\.app",  # all Railway preview URLs
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
